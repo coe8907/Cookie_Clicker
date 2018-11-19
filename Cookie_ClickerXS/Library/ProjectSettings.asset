@@ -646,9 +646,9 @@ PlayerSettings:
     UNet: 1
   facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 2
-  cloudProjectId: ef8e5456-6d39-4683-827b-e824803808ff
+  cloudProjectId: 00bc6a13-8980-42fe-86e2-c19ef97f11bc
   projectName: Cookie_ClickerXS
-  organizationId: oliver-coe
+  organizationId: tokw
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0

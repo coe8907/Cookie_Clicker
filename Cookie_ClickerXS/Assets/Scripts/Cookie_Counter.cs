@@ -12,8 +12,8 @@ public class Cookie_Counter : MonoBehaviour {
 	}
 	public void Add_Cookies(int num)
     {
-        text_box.text = "this has been changed";
         num_cookies += num;
+        text_box.text = string.Format("Cookies: {0}",num_cookies);
     }
 
 }
