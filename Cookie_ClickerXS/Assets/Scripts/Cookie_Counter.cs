@@ -15,5 +15,14 @@ public class Cookie_Counter : MonoBehaviour {
         num_cookies += num;
         text_box.text = string.Format("Cookies: {0}",num_cookies);
     }
+    public bool Can_buy(int cost)
+    {
+        if(num_cookies >= cost)
+        {
+            num_cookies -= cost;
+            return true;
+        }
+        return false;
+    }
 
 }

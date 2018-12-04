@@ -5,7 +5,7 @@ using UnityEngine;
 public class MuffinButton : MonoBehaviour {
 
     public GameObject premiumPanel;
-
+    public GameObject scrollPanel;
 	// Use this for initialization
 	void Start () {
 		
@@ -18,6 +18,7 @@ public class MuffinButton : MonoBehaviour {
     
     public void TogglePremiumPanel()
     {
+        scrollPanel.SetActive(false);
         premiumPanel.SetActive(!premiumPanel.activeSelf);
     }
 
