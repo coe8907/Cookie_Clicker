@@ -20,6 +20,7 @@ public class Cookie_Counter : MonoBehaviour {
         if(num_cookies >= cost)
         {
             num_cookies -= cost;
+            text_box.text = string.Format("Cookies: {0}", num_cookies);
             return true;
         }
         return false;

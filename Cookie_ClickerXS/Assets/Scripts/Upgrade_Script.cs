@@ -7,9 +7,12 @@ public class Upgrade_Script : MonoBehaviour {
 
     // Use this for initialization
     public int cost_c;
+    public int cost_m;
     public int Cookies_perLevel_sec = 0;
     public int level = 0;
+    public GameObject M_cost;
     private GameObject Cookie;
+    private GameObject muffin;
     public GameObject Level_text;
     
    
@@ -17,7 +20,9 @@ public class Upgrade_Script : MonoBehaviour {
 	void Start () {
         //load from save file
         Cookie = GameObject.Find("Cookie");
+        muffin = GameObject.Find("Muffin_counter");
         this.GetComponent<Text>().text = string.Format("Cost: {0}", cost_c);
+        M_cost.GetComponent<Text>().text = string.Format("Cost: {0}", cost_m);
         Level_text.GetComponent<Text>().text = string.Format("Level: {0}", level);
     }
     //when app closes
@@ -46,16 +51,15 @@ public class Upgrade_Script : MonoBehaviour {
         }
 
     }
-   /* public void Buy_upgrade_m()
+    public void Buy_upgrade_m()
     {
-        if (Cookie.GetComponent<Cookie_Counter>().Can_buy(cost_c) == true)
+        if (muffin.GetComponent<Muffin_Counter>().Can_buy(cost_m) == true)
         {
             level++;
-            cost_c = cost_c * 2;
-            this.GetComponent<Text>().text = string.Format("Cost: {0}", cost_c);
+            M_cost.GetComponent<Text>().text = string.Format("Cost: {0}", cost_m);
             Level_text.GetComponent<Text>().text = string.Format("Level: {0}", level);
         }
 
-    }*/
+    }
 
 }
