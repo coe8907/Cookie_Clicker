@@ -17,7 +17,7 @@ public class Muffin_Counter : MonoBehaviour {
         if (muffin_count >= cost)
         {
             muffin_count -= cost;
-            text_box.text = string.Format("Muffins : {0}", muffin_count);
+            text_box.text = string.Format("Muffins : {0}", muffin_count); 
             return true;
         }
         return false;

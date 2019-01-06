@@ -1,0 +1,6 @@
+int id
+string name
+int cookies
+int level {9}
+
+int level end
