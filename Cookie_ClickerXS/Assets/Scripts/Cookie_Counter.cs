@@ -7,19 +7,41 @@ using System.IO;
 public class Cookie_Counter : MonoBehaviour {
     public int num_cookies = 0;
     public Text text_box;
-    int[] level = new int[20];
+    int[] level;
     string id = "";
     string name = "";
-    
+    bool localsave = false;
+    string path_start = "Assets";
+    public GameObject muffin_counter;
 	// Use this for initialization
 	void Start () {
-        string path = "Assets/Save_File.txt";
-        StreamReader reader;
-        reader = new StreamReader(path);
-         id = reader.ReadLine().ToString();
-        name = reader.ReadLine().ToString();
-        num_cookies = int.Parse(reader.ReadLine());
-        reader.Close();
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            path_start = Application.persistentDataPath;
+        }
+        string path = path_start + "/Save_File.txt";
+        level = new int[20];
+        if (File.Exists(path))
+        {
+            localsave = true;
+        }
+        if (localsave)
+        {
+            StreamReader reader;
+            reader = new StreamReader(path);
+            id = reader.ReadLine().ToString();
+            name = reader.ReadLine().ToString();
+            num_cookies = int.Parse(reader.ReadLine());
+            muffin_counter.GetComponent<Muffin_Counter>().muffin_count = int.Parse(reader.ReadLine());
+            reader.Close();
+            
+        }
+        else
+        {
+            id = "no save";
+            name = "no save";
+            save_data();
+        }
 
     }
     public void update_data(int level_id, int level_d)
@@ -38,26 +60,30 @@ public class Cookie_Counter : MonoBehaviour {
     }
     public void save_data()
     {
-        Debug.Log("end game2");
-        string path = "Assets/Save_File.txt";
+        Debug.Log("Save 1");
+        string path = path_start + "/Save_File.txt";
         if (File.Exists(path))
         {
-           File.WriteAllText(path, "");
+            File.WriteAllText(path, "");
             File.Create(path).Close();
         }
-        Debug.Log("end game3"   );
+        Debug.Log("Save 2");
         StreamWriter writer = new StreamWriter(path, true);
 
         writer.WriteLine(id);
         writer.WriteLine(name);
         writer.WriteLine(num_cookies.ToString());
+        writer.WriteLine(muffin_counter.GetComponent<Muffin_Counter>().muffin_count.ToString());
         for (int i = 0; i < 20; i++)
         {
             writer.WriteLine(level[i].ToString());
-            Debug.Log("saveed file" + level[i].ToString());
+            Debug.Log("Saved file" + level[i].ToString());
         }
         writer.Close();
-        gameObject.GetComponent<Connect_to_SQL>().Update_User(id, name, num_cookies, level);
+        if (localsave && gameObject.GetComponent<Connect_to_SQL>().Con())
+        {
+            gameObject.GetComponent<Connect_to_SQL>().Update_User(id, name, num_cookies, muffin_counter.GetComponent<Muffin_Counter>().muffin_count, level);
+        }
     }
     
 	public void Add_Cookies(int num)

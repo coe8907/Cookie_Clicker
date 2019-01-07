@@ -1,12 +1,12 @@
 ﻿
 using UnityEngine;
 using System;
-using System.Data;
+//using System.Data;
 using System.Text;
 
-using System.Collections;
+//using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
+//using System.Security.Cryptography;
 
 using MySql.Data;
 using MySql.Data.MySqlClient;
@@ -22,27 +22,25 @@ public struct userInfo{
 public class Connect_to_SQL : MonoBehaviour
 {
     public string host, database, user, password;
-    public bool pooling = true;
-
+   
     private string connectionString;
     private MySqlConnection con = null;
     private MySqlCommand cmd = null;
     private MySqlDataReader rdr = null;
-
-    private MD5 _md5Hash;
+    private string path_start = "Assets";
+   
+   // private MD5 _md5Hash;
 
     void Awake()
     {
-        DontDestroyOnLoad(this.gameObject);
-        connectionString = "Server=" + host + ";Database=" + database + ";User=" + user + ";Password=" + password + ";Pooling=";
-        if (pooling)
+        if (Application.platform == RuntimePlatform.Android)
         {
-            connectionString += "True";
+            path_start = Application.persistentDataPath;
         }
-        else
-        {
-            connectionString += "False";
-        }
+
+        connectionString = "Server=" + host + ";Database=" + database + ";User=" + user + ";Password=" + password + ";Pooling= True";
+       
+       
         try
         {
             con = new MySqlConnection(connectionString);
@@ -83,19 +81,26 @@ public class Connect_to_SQL : MonoBehaviour
     // add new user to the data base
     public bool Add_User(string name, string password)
     {
-        string command = string.Format("INSERT INTO Users(User_name,Password,Cookies) VALUES (\"{0}\",\"{1}\",0)",name,password);
+        string command = string.Format("INSERT INTO Users(User_name,Password,Cookies,Muffins) VALUES (\"{0}\",\"{1}\",0,0)",name,password);
         Debug.Log(command);
         cmd = new MySqlCommand(command, con); ;
         cmd.ExecuteNonQuery();
         return true;
     }
-    public bool Update_User(string id,string name, int cookies,int[] levels)
+    public bool Update_User(string id,string name, int cookies,int muffins,int[] levels)
     {
 
-        // UPDATE `Users` SET `upgrade2` = '5' WHERE `Users`.`ID` = 1
+        /*update server side with number of cookies*/
         string command = string.Format("UPDATE `Users` SET `Cookies` = '{0}' WHERE `Users`.`ID` = {1}", cookies.ToString(), id.ToString());
         cmd = new MySqlCommand(command, con); ;
         cmd.ExecuteNonQuery();
+
+        /*update server side with users muffins*/
+         command = string.Format("UPDATE `Users` SET `Muffins` = '{0}' WHERE `Users`.`ID` = {1}", muffins.ToString(), id.ToString());
+        cmd = new MySqlCommand(command, con); ;
+        cmd.ExecuteNonQuery();
+
+        /*Up date server side with the upgrades values*/
         for (int i = 0; i < 9; i++)
         {
             command = string.Format("UPDATE `Users` SET `upgrade{0}` = '{1}' WHERE `Users`.`ID` = {2}", i.ToString(), levels[i].ToString(), id.ToString());
@@ -127,6 +132,7 @@ public class Connect_to_SQL : MonoBehaviour
     // test the users log its not sucure in any way but it will work for the pupose of the demo
     public bool Test_Login(string username,string password)
     {
+
         string sql = "SELECT * FROM Users";
         cmd = new MySqlCommand(sql, con);
         using (rdr = cmd.ExecuteReader())
@@ -137,7 +143,7 @@ public class Connect_to_SQL : MonoBehaviour
                 {
                     if(rdr[2].ToString() == password)
                     {
-                        string path = "Assets/Save_File.txt";
+                        string path = path_start + "/Save_File.txt";
                         if (File.Exists(path))
                         {
                             File.WriteAllText(path, "");
@@ -145,7 +151,7 @@ public class Connect_to_SQL : MonoBehaviour
                         }
 
                         StreamWriter writer = new StreamWriter(path, true);
-                        for(int i = 0; i < 14; i++)
+                        for(int i = 0; i < 15; i++)
                         {
                             if (i != 2)
                             {
@@ -170,19 +176,14 @@ public class Connect_to_SQL : MonoBehaviour
         }
         return false;
     }
-    public string getFirstShops()
-    {
-        using (rdr = cmd.ExecuteReader())
-        {
-            while (rdr.Read())
-            {
-                return rdr[0] + " -- " + rdr[1];
-            }
-        }
-        return "empty";
-    }
+    
     public string GetConnectionState()
     {
         return con.State.ToString();
+    }
+    public bool Con()
+    {
+        string r = con.State.ToString();
+        return (r == "Open");
     }
 }

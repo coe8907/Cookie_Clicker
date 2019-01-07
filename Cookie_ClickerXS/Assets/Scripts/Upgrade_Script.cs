@@ -16,17 +16,22 @@ public class Upgrade_Script : MonoBehaviour {
     private GameObject Cookie;
     private GameObject muffin;
     public GameObject Level_text;
-    
-   
+    string path_start = "Assets";
 
-	void Start () {
+
+    void Start () {
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            path_start = Application.persistentDataPath;
+        }
         Debug.Log(upgrade_id);
-        string path = "Assets/Save_File.txt";
+        string path = path_start + "/Save_File.txt";
         StreamReader reader;
         reader = new StreamReader(path);
-        string t = reader.ReadLine().ToString();
-        t = reader.ReadLine().ToString();
-        t = reader.ReadLine().ToString();
+        string t = reader.ReadLine().ToString(); // dis id
+        t = reader.ReadLine().ToString(); // dis name
+        t = reader.ReadLine().ToString(); // dis cookie count
+        t = reader.ReadLine().ToString(); // dis muffins 
         for (int i = 0; i < upgrade_id; i++)
         {
             t = reader.ReadLine().ToString();

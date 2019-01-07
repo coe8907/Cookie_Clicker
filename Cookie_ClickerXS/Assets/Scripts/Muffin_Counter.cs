@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Muffin_Counter : MonoBehaviour {
-    private int muffin_count = 0;
+    public int muffin_count = 0;
     public Text text_box;
     // Use this for initialization
     public void Add_Muffin(int num)
@@ -23,8 +23,8 @@ public class Muffin_Counter : MonoBehaviour {
         return false;
     }
     void Start () {
-		
-	}
+        text_box.text = string.Format("Muffins : {0}", muffin_count);
+    }
 	
 	// Update is called once per frame
 	void Update () {
